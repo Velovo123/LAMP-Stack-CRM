@@ -1,25 +1,28 @@
 <?php
 include "db_conn.php";
+
 $id = $_GET["id"];
 
 if (isset($_POST["submit"])) {
   $name = $_POST['name'];
-  $type_id = $_POST['type_id'];
-  $rating = $_POST['rating'];
+  $location = $_POST['location'];
+  $capacity = $_POST['capacity'];
 
-  $sql = "UPDATE `tv_show` SET `name`='$name',`type_id`='$type_id', `rating`='$rating' WHERE id = $id";
+  $sql = "UPDATE `studio` SET `name`='$name', `location`='$location', `capacity`='$capacity' WHERE id = $id";
 
   $result = mysqli_query($conn, $sql);
 
   if ($result) {
-    header("Location: show.php?msg=Data updated successfully");
+    header("Location: studio.php?msg=Studio information updated successfully");
   } else {
     echo "Failed: " . mysqli_error($conn);
   }
 }
 
+$sql = "SELECT * FROM `studio` WHERE id = $id LIMIT 1";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,25 +38,19 @@ if (isset($_POST["submit"])) {
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <title>Edit TV Show</title>
+  <title>Edit Studio Information</title>
 </head>
 
 <body>
   <nav class="navbar navbar-light justify-content-center fs-3 mb-5" style="background-color: #00ff5573;">
-    TV Shows CRUD Application
+    Edit Studio Information
   </nav>
 
   <div class="container">
     <div class="text-center mb-4">
-      <h3>Edit TV Show Information</h3>
-      <p class="text-muted">Click update after changing any information</p>
+      <h3>Edit Studio Information</h3>
+      <p class="text-muted">Update the information below and click "Update" to save changes</p>
     </div>
-
-    <?php
-    $sql = "SELECT * FROM `tv_show` WHERE id = $id LIMIT 1";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($result);
-    ?>
 
     <div class="container d-flex justify-content-center">
       <form action="" method="post" style="width:50vw; min-width:300px;">
@@ -63,27 +60,18 @@ if (isset($_POST["submit"])) {
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Type:</label>
-          <select class="form-select" name="type_id" required>
-            <?php
-            $types_sql = "SELECT * FROM `show_type`";
-            $types_result = mysqli_query($conn, $types_sql);
-            while ($type_row = mysqli_fetch_assoc($types_result)) {
-              $selected = ($type_row['id'] == $row['type_id']) ? 'selected' : '';
-              echo "<option value='" . $type_row['id'] . "' $selected>" . $type_row['type'] . "</option>";
-            }
-            ?>
-          </select>
+          <label class="form-label">Location:</label>
+          <input type="text" class="form-control" name="location" value="<?php echo $row['location'] ?>" required>
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Rating:</label>
-          <input type="number" class="form-control" name="rating" step="0.1" min="0" max="10" value="<?php echo $row['rating'] ?>" required>
+          <label class="form-label">Capacity:</label>
+          <input type="number" class="form-control" name="capacity" value="<?php echo $row['capacity'] ?>" required>
         </div>
 
         <div>
           <button type="submit" class="btn btn-success" name="submit">Update</button>
-          <a href="show.php" class="btn btn-danger">Cancel</a>
+          <a href="studio.php" class="btn btn-danger">Cancel</a>
         </div>
       </form>
     </div>

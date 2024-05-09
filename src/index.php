@@ -17,6 +17,7 @@
     <div class="form">
        <a href="staff.php" class="button-24">Staff</a>
        <a href="show.php" class="button-24">Show</a>
+       <a href="studio.php" class="button-24">Studio</a>
         
     </div>
 </body>

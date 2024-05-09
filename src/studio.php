@@ -16,7 +16,7 @@ include "db_conn.php";
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <title>TV Shows</title>
+  <title>Studio Management</title>
 </head>
 
 <body>
@@ -34,32 +34,32 @@ include "db_conn.php";
     </div>';
     }
     ?>
-    <a href="add-new-show.php" class="btn btn-dark mb-3">Add New</a>
+    <a href="add-new-studio.php" class="btn btn-dark mb-3">Add New Studio</a>
 
     <table class="table table-hover text-center">
       <thead class="table-dark">
         <tr>
           <th scope="col">ID</th>
-          <th scope="col">Name</th>
-          <th scope="col">Type</th>
-          <th scope="col">Rating</th>
+          <th scope="col">Studio Name</th>
+          <th scope="col">Location</th>
+          <th scope="col">Capacity</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
         <?php
-        $sql = "SELECT tv_show.id, tv_show.name, show_type.type, tv_show.rating FROM tv_show INNER JOIN show_type ON tv_show.type_id = show_type.id";
+        $sql = "SELECT * FROM `studio`";
         $result = mysqli_query($conn, $sql);
         while ($row = mysqli_fetch_assoc($result)) {
         ?>
           <tr>
             <td><?php echo $row["id"] ?></td>
             <td><?php echo $row["name"] ?></td>
-            <td><?php echo $row["type"] ?></td>
-            <td><?php echo $row["rating"] ?></td>
+            <td><?php echo $row["location"] ?></td>
+            <td><?php echo $row["capacity"] ?></td>
             <td>
-              <a href="edit-show.php?id=<?php echo $row["id"] ?>" class="link-dark"><i class="fa-solid fa-pen-to-square fs-5 me-3"></i></a>
-              <a href="delete-show.php?id=<?php echo $row["id"] ?>" class="link-dark"><i class="fa-solid fa-trash fs-5"></i></a>
+              <a href="edit-studio.php?id=<?php echo $row["id"] ?>" class="link-dark"><i class="fa-solid fa-pen-to-square fs-5 me-3"></i></a>
+              <a href="delete-studio.php?id=<?php echo $row["id"] ?>" class="link-dark"><i class="fa-solid fa-trash fs-5"></i></a>
             </td>
           </tr>
         <?php
