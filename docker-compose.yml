@@ -8,13 +8,13 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
     volumes:
-      - "../db:/docker-entrypoint-initdb.d"
+      - "./db:/docker-entrypoint-initdb.d"
   www:
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - "./:/var/www/html"
+      - "./src:/var/www/html"
     ports:
       - 80:80
       - 443:443
