@@ -2,20 +2,38 @@
 include "db_conn.php";
 
 $id = $_GET["id"];
+$errors = array(); 
 
 if (isset($_POST["submit"])) {
-  $name = $_POST['name'];
-  $location = $_POST['location'];
-  $capacity = $_POST['capacity'];
-
-  $sql = "UPDATE `studio` SET `name`='$name', `location`='$location', `capacity`='$capacity' WHERE id = $id";
-
-  $result = mysqli_query($conn, $sql);
-
-  if ($result) {
-    header("Location: studio.php?msg=Studio information updated successfully");
+  if (empty($_POST['name'])) {
+    $errors[] = "Name is required";
   } else {
-    echo "Failed: " . mysqli_error($conn);
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+  }
+
+  if (empty($_POST['location'])) {
+    $errors[] = "Location is required";
+  } else {
+    $location = mysqli_real_escape_string($conn, $_POST['location']);
+  }
+
+  if (empty($_POST['capacity'])) {
+    $errors[] = "Capacity is required";
+  } elseif (!is_numeric($_POST['capacity']) || $_POST['capacity'] < 1) {
+    $errors[] = "Capacity must be a positive integer";
+  } else {
+    $capacity = mysqli_real_escape_string($conn, $_POST['capacity']);
+  }
+
+  if (empty($errors)) {
+    $sql = "UPDATE `studio` SET `name`='$name', `location`='$location', `capacity`='$capacity' WHERE id = $id";
+    $result = mysqli_query($conn, $sql);
+
+    if ($result) {
+      header("Location: studio.php?msg=Studio information updated successfully");
+    } else {
+      echo "Failed: " . mysqli_error($conn);
+    }
   }
 }
 

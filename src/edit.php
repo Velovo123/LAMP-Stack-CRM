@@ -3,21 +3,46 @@ include "db_conn.php";
 $id = $_GET["id"];
 
 if (isset($_POST["submit"])) {
-  $first_name = $_POST['firstName'];
-  $last_name = $_POST['lastName'];
-  $phoneNumber = $_POST['phoneNumber'];
-  $address = $_POST['address'];
-  $title = $_POST['title'];
+  // Validate form inputs
+  $errors = [];
+  $first_name = mysqli_real_escape_string($conn, $_POST['firstName']);
+  $last_name = mysqli_real_escape_string($conn, $_POST['lastName']);
+  $phoneNumber = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
+  $address = mysqli_real_escape_string($conn, $_POST['address']);
+  $title = mysqli_real_escape_string($conn, $_POST['title']);
   
+  if (empty($first_name)) {
+    $errors[] = "First name is required";
+  }
 
-  $sql = "UPDATE `staff` SET `lastName`='$last_name',`firstName`='$first_name',`phoneNumber`='$phoneNumber',`address`='$address', `title`='$title' WHERE id = $id";
+  if (empty($last_name)) {
+    $errors[] = "Last name is required";
+  }
 
-  $result = mysqli_query($conn, $sql);
+  if (empty($phoneNumber)) {
+    $errors[] = "Phone number is required";
+  }
 
-  if ($result) {
-    header("Location: staff.php?msg=Data updated successfully");
-  } else {
-    echo "Failed: " . mysqli_error($conn);
+  if (empty($address)) {
+    $errors[] = "Address is required";
+  }
+
+  if (empty($title)) {
+    $errors[] = "Title is required";
+  }
+
+  // If there are no validation errors, proceed with the update
+  if (empty($errors)) {
+    $sql = "UPDATE `staff` SET `lastName`='$last_name',`firstName`='$first_name',`phoneNumber`='$phoneNumber',`address`='$address', `title`='$title' WHERE id = $id";
+
+    $result = mysqli_query($conn, $sql);
+
+    if ($result) {
+      header("Location: staff.php?msg=Data updated successfully");
+      exit();
+    } else {
+      echo "Failed: " . mysqli_error($conn);
+    }
   }
 }
 
@@ -45,7 +70,7 @@ if (isset($_POST["submit"])) {
 
 <body>
   <nav class="navbar navbar-light justify-content-center fs-3 mb-5" style="background-color: #00ff5573;">
-    PHP Complete CRUD Application
+    LABA
   </nav>
 
   <div class="container">

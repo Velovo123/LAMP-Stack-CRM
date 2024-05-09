@@ -1,24 +1,52 @@
 <?php
 include "db_conn.php";
 
+$errors = array(); 
+
 if (isset($_POST["submit"])) {
-   $first_name = $_POST['firstName'];
-   $last_name = $_POST['lastName'];
-   $phone_number = $_POST['phoneNumber'];
-   $address = $_POST['address'];
-   $title = $_POST['title'];
-
-   $sql = "INSERT INTO `staff`(`id`, `lastName`, `firstName`, `phoneNumber`, `address`, `title`) VALUES (NULL,'$last_name','$first_name','$phone_number','$address','$title')";
-
-   $result = mysqli_query($conn, $sql);
-
-   if ($result) {
-      header("Location: staff.php?msg=New record created successfully");
+   if (empty($_POST['firstName'])) {
+      $errors[] = "First name is required";
    } else {
-      echo "Failed: " . mysqli_error($conn);
+      $first_name = mysqli_real_escape_string($conn, $_POST['firstName']);
+   }
+
+   if (empty($_POST['lastName'])) {
+      $errors[] = "Last name is required";
+   } else {
+      $last_name = mysqli_real_escape_string($conn, $_POST['lastName']);
+   }
+
+   if (empty($_POST['phoneNumber'])) {
+      $errors[] = "Phone number is required";
+   } elseif (!preg_match("/^[0-9]{3}-[0-9]{2}-[0-9]{3}$/", $_POST['phoneNumber'])) {
+      $errors[] = "Phone number must be in the format XXX-XX-XXX";
+   } else {
+      $phone_number = mysqli_real_escape_string($conn, $_POST['phoneNumber']);
+   }
+
+   if (empty($_POST['address'])) {
+      $errors[] = "Address is required";
+   } else {
+      $address = mysqli_real_escape_string($conn, $_POST['address']);
+   }
+
+   if (empty($_POST['title'])) {
+      $errors[] = "Title is required";
+   } else {
+      $title = mysqli_real_escape_string($conn, $_POST['title']);
+   }
+
+   if (empty($errors)) {
+      $sql = "INSERT INTO `staff`(`id`, `lastName`, `firstName`, `phoneNumber`, `address`, `title`) VALUES (NULL,'$last_name','$first_name','$phone_number','$address','$title')";
+      $result = mysqli_query($conn, $sql);
+
+      if ($result) {
+         header("Location: staff.php?msg=New record created successfully");
+      } else {
+         echo "Failed: " . mysqli_error($conn);
+      }
    }
 }
-
 ?>
 
 

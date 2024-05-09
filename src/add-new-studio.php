@@ -1,19 +1,38 @@
 <?php
 include "db_conn.php";
 
+$errors = array(); 
+
 if (isset($_POST["submit"])) {
-    $name = $_POST['name'];
-    $location = $_POST['location'];
-    $capacity = $_POST['capacity'];
-
-    $sql = "INSERT INTO `studio` (`name`, `location`, `capacity`) VALUES ('$name', '$location', '$capacity')";
-
-    $result = mysqli_query($conn, $sql);
-
-    if ($result) {
-        header("Location: studio.php?msg=New studio created successfully");
+    if (empty($_POST['name'])) {
+        $errors[] = "Name is required";
     } else {
-        echo "Failed: " . mysqli_error($conn);
+        $name = mysqli_real_escape_string($conn, $_POST['name']);
+    }
+
+    if (empty($_POST['location'])) {
+        $errors[] = "Location is required";
+    } else {
+        $location = mysqli_real_escape_string($conn, $_POST['location']);
+    }
+
+    if (empty($_POST['capacity'])) {
+        $errors[] = "Capacity is required";
+    } elseif (!is_numeric($_POST['capacity']) || $_POST['capacity'] < 1) {
+        $errors[] = "Capacity must be a positive integer";
+    } else {
+        $capacity = mysqli_real_escape_string($conn, $_POST['capacity']);
+    }
+
+    if (empty($errors)) {
+        $sql = "INSERT INTO `studio` (`name`, `location`, `capacity`) VALUES ('$name', '$location', '$capacity')";
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            header("Location: studio.php?msg=New studio created successfully");
+        } else {
+            echo "Failed: " . mysqli_error($conn);
+        }
     }
 }
 ?>

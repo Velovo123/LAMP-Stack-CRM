@@ -2,20 +2,39 @@
 include "db_conn.php";
 $id = $_GET["id"];
 
+$errors = array();
+
 if (isset($_POST["submit"])) {
-  $name = $_POST['name'];
-  $type_id = $_POST['type_id'];
-  $rating = $_POST['rating'];
+    if (empty($_POST['name'])) {
+        $errors[] = "Name is required";
+    } else {
+        $name = mysqli_real_escape_string($conn, $_POST['name']);
+    }
 
-  $sql = "UPDATE `tv_show` SET `name`='$name',`type_id`='$type_id', `rating`='$rating' WHERE id = $id";
+    if (empty($_POST['type_id'])) {
+        $errors[] = "Type is required";
+    } else {
+        $type_id = mysqli_real_escape_string($conn, $_POST['type_id']);
+    }
 
-  $result = mysqli_query($conn, $sql);
+    if (empty($_POST['rating'])) {
+        $errors[] = "Rating is required";
+    } elseif (!is_numeric($_POST['rating']) || $_POST['rating'] < 0 || $_POST['rating'] > 9.9) {
+        $errors[] = "Rating must be a number between 0 and 10";
+    } else {
+        $rating = mysqli_real_escape_string($conn, $_POST['rating']);
+    }
 
-  if ($result) {
-    header("Location: show.php?msg=Data updated successfully");
-  } else {
-    echo "Failed: " . mysqli_error($conn);
-  }
+    if (empty($errors)) {
+        $sql = "UPDATE `tv_show` SET `name`='$name',`type_id`='$type_id', `rating`='$rating' WHERE id = $id";
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            header("Location: show.php?msg=Data updated successfully");
+        } else {
+            echo "Failed: " . mysqli_error($conn);
+        }
+    }
 }
 
 ?>
