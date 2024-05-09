@@ -13,7 +13,7 @@ if (isset($_POST["submit"])) {
    $result = mysqli_query($conn, $sql);
 
    if ($result) {
-      header("Location: index.php?msg=New record created successfully");
+      header("Location: staff.php?msg=New record created successfully");
    } else {
       echo "Failed: " . mysqli_error($conn);
    }
@@ -57,12 +57,12 @@ if (isset($_POST["submit"])) {
             <div class="row mb-3">
                <div class="col">
                   <label class="form-label">First Name:</label>
-                  <input type="text" class="form-control" name="firstName" placeholder="Albert">
+                  <input type="text" class="form-control" name="firstName" placeholder="Albert" required>
                </div>
 
                <div class="col">
                   <label class="form-label">Last Name:</label>
-                  <input type="text" class="form-control" name="lastName" placeholder="Einstein">
+                  <input type="text" class="form-control" name="lastName" placeholder="Einstein" required>
                </div>
             </div>
 
@@ -83,7 +83,7 @@ if (isset($_POST["submit"])) {
 
             <div>
                <button type="submit" class="btn btn-success" name="submit">Save</button>
-               <a href="index.php" class="btn btn-danger">Cancel</a>
+               <a href="staff.php" class="btn btn-danger">Cancel</a>
             </div>
          </form>
       </div>

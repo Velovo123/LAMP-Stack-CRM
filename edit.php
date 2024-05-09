@@ -15,7 +15,7 @@ if (isset($_POST["submit"])) {
   $result = mysqli_query($conn, $sql);
 
   if ($result) {
-    header("Location: index.php?msg=Data updated successfully");
+    header("Location: staff.php?msg=Data updated successfully");
   } else {
     echo "Failed: " . mysqli_error($conn);
   }
@@ -65,32 +65,32 @@ if (isset($_POST["submit"])) {
         <div class="row mb-3">
           <div class="col">
             <label class="form-label">First Name:</label>
-            <input type="text" class="form-control" name="firstName" value="<?php echo $row['firstName'] ?>">
+            <input type="text" class="form-control" name="firstName" value="<?php echo $row['firstName'] ?>" required>
           </div>
 
           <div class="col">
             <label class="form-label">Last Name:</label>
-            <input type="text" class="form-control" name="lastName" value="<?php echo $row['lastName'] ?>">
+            <input type="text" class="form-control" name="lastName" value="<?php echo $row['lastName'] ?>" required>
           </div>
         </div>
 
         <div class="mb-3">
           <label class="form-label">Phone Number:</label>
-          <input type="tel" class="form-control" name="phoneNumber" value="<?php echo $row['phoneNumber'] ?>">
+          <input type="tel" class="form-control" name="phoneNumber" value="<?php echo $row['phoneNumber'] ?>" required>
         </div>
 
         <div class="mb-3">
           <label class="form-label">Address:</label>
-          <input type="text" class="form-control" name="address" value="<?php echo $row['address'] ?>">
+          <input type="text" class="form-control" name="address" value="<?php echo $row['address'] ?>" required>
         </div>
 
         <div class="mb-3">
           <label class="form-label">Title:</label>
-          <input type="text" class="form-control" name="title" value="<?php echo $row['title'] ?>">
+          <input type="text" class="form-control" name="title" value="<?php echo $row['title'] ?>" required>
         </div>
         <div>
           <button type="submit" class="btn btn-success" name="submit">Update</button>
-          <a href="index.php" class="btn btn-danger">Cancel</a>
+          <a href="staff.php" class="btn btn-danger">Cancel</a>
         </div>
       </form>
     </div>
