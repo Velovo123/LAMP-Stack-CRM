@@ -76,7 +76,7 @@ include "db_conn.php";
 
 <script>
     function confirmDelete() {
-      return confirm("Are you sure");
+      return confirm("Are you sure?");
     }
 </script>
 

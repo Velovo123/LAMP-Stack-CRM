@@ -19,6 +19,7 @@
        <a href="show.php" class="button-24">Show</a>
        <a href="studio.php" class="button-24">Studio</a>
        <a href="show-details.php" class="button-24">Details</a>
+       <div>Page Views: <?php include 'counter.php'; ?></div>
     </div>
 </body>
 </html>

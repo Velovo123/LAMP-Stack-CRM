@@ -1,5 +1,6 @@
 <?php
 include "db_conn.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +22,7 @@ include "db_conn.php";
 
 <body>
   <nav class="navbar navbar-light justify-content-center fs-3 mb-5" style="background-color: #00ff5573;">
-  <a href="index.php" class="btn btn-dark mb-3">Home</a>
+    <a href="index.php" class="btn btn-dark mb-3">Home</a>
   </nav>
 
   <div class="container">
@@ -35,7 +36,10 @@ include "db_conn.php";
     }
     ?>
     <a href="add-new.php" class="btn btn-dark mb-3">Add New</a>
-
+    <div class="mb-3">
+      <button type="button" class="btn btn-primary" onclick="getAllRecords()">Get All Records</button>
+      <button type="button" class="btn btn-primary" onclick="getByFirstNameLastName()">Get By First Name and Last Name</button>
+    </div>
     <table class="table table-hover text-center">
       <thead class="table-dark">
         <tr>
@@ -47,26 +51,8 @@ include "db_conn.php";
           <th scope="col">Action</th>
         </tr>
       </thead>
-      <tbody>
-        <?php
-        $sql = "SELECT * FROM `staff`";
-        $result = mysqli_query($conn, $sql);
-        while ($row = mysqli_fetch_assoc($result)) {
-        ?>
-          <tr>
-            <td><?php echo $row["id"] ?></td>
-            <td><?php echo $row["firstName"] ?></td>
-            <td><?php echo $row["lastName"] ?></td>
-            <td><?php echo $row["phoneNumber"] ?></td>
-            <td><?php echo $row["title"] ?></td>
-            <td>
-              <a href="edit.php?id=<?php echo $row["id"] ?>" class="link-dark"><i class="fa-solid fa-pen-to-square fs-5 me-3"></i></a>
-              <a href="delete.php?id=<?php echo $row["id"] ?>" class="link-dark" onclick="return confirmDelete();"><i class="fa-solid fa-trash fs-5"></i></a>
-            </td>
-          </tr>
-        <?php
-        }
-        ?>
+      <tbody id="tableBody">
+        <!-- Table body will be filled with data via JavaScript -->
       </tbody>
     </table>
   </div>
@@ -74,11 +60,41 @@ include "db_conn.php";
   <!-- Bootstrap -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
-</body>
-<script>
+  <script>
     function confirmDelete() {
-      return confirm("Are you sure");
+      return confirm("Are you sure?");
     }
-</script>
+
+    function getAllRecords() {
+      // AJAX request to retrieve all records
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          // Update table with retrieved data
+          document.getElementById("tableBody").innerHTML = this.responseText;
+        }
+      };
+      xhr.open("GET", "get_records.php?getAllRecords=true", true);
+      xhr.send();
+    }
+
+    function getByFirstNameLastName() {
+      var firstName = prompt("Enter First Name:");
+      var lastName = prompt("Enter Last Name:");
+
+      // AJAX request to retrieve records by first name and last name
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          // Update table with retrieved data
+          document.getElementById("tableBody").innerHTML = this.responseText;
+        }
+      };
+      xhr.open("GET", "get_records.php?firstName=" + firstName + "&lastName=" + lastName, true);
+      xhr.send();
+    }
+  </script>
+
+</body>
 
 </html>
