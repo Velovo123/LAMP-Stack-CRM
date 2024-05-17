@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Models;
+
+use PDO;
 class Invoice
 {
     public function getData() : array

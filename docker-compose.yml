@@ -15,6 +15,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - "./advertising_agency:/var/www/html"
+      - "./.htaccess:/var/www/html/./htaccess"
     ports:
       - 80:80
       - 443:443
