@@ -14,7 +14,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - "./src:/var/www/html"
+      - "./advertising_agency:/var/www/html"
     ports:
       - 80:80
       - 443:443
