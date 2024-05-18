@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Invoice;
+use Framework\Viewer;
 class Invoices
 {
     public function index()
@@ -11,11 +12,25 @@ class Invoices
 
         $invoices = $model->getData();
 
-        require "views/invoices_index.php";
+        $viewer = new Viewer;
+
+        echo $viewer->render("shared/header.php", ["title" => "Invoices"]);
+
+        echo $viewer->render("Invoices/index.php", ["invoices" => $invoices]);
+
     }
 
-    public function show()
+    public function show(string $id)
     {
-        require "views/invoices_show.php";
+        $viewer = new Viewer;
+
+        echo $viewer->render("shared/header.php",["title" => "Invoices"]);
+
+        echo $viewer->render("Invoices/show.php", ["id" => $id]);
+    }
+
+    public function showPage(string $title, $id, string $page)
+    {
+        echo $title, " ", $id, " ", $page;
     }
 }

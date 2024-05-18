@@ -10,27 +10,19 @@ spl_autoload_register(function (string $class_name)
 
 $router = new Framework\Router;
 
+$router->add("/admin/{controller}/{action}", ["namespace" => "Admin"]);
+$router->add("/{title}/{id:\d+}/{page:\d+}", ["controller" => "invoices", "action" => "showPage"]);
+$router->add("/invoice/{slug:[\w-]+}", ["controller" => "invoices", "action" => "show"]);
+$router->add("/{controller}/{id:\d+}/{action}", $params = []);
 $router->add("/home/index",["controller" => "home", "action" => "index"]);
 $router->add("/invoices", ["controller" => "invoices", "action" => "index"]);
 $router->add("/", ["controller" => "home", "action" => "index"]);
-
-$params = $router->match($path);
-
-if($params === false)
-{
-    exit("No route matched");
-}
-
-$action = $params["action"];
-$controller = "App\Controllers\\" . ucwords($params["controller"]);
+$router->add("/{controller}/{action}", $params = []);
 
 
 
-$controller_object = new $controller;
+$dispatcher = new Framework\Dispatcher($router);
 
-
-
-$controller_object->$action();
-
+$dispatcher->handle($path);
 
 
