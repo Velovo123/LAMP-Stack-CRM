@@ -1,27 +1,34 @@
 <?php
 
-$path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-
+declare(strict_types= 1);
 
 spl_autoload_register(function (string $class_name)
 {
     require "src/" . str_replace("\\", "/", $class_name) . ".php";
 });
 
-$router = new Framework\Router;
+$dotenv = new Framework\Dotenv;
 
-$router->add("/admin/{controller}/{action}", ["namespace" => "Admin"]);
-$router->add("/{title}/{id:\d+}/{page:\d+}", ["controller" => "invoices", "action" => "showPage"]);
-$router->add("/invoice/{slug:[\w-]+}", ["controller" => "invoices", "action" => "show"]);
-$router->add("/{controller}/{id:\d+}/{action}", $params = []);
-$router->add("/home/index",["controller" => "home", "action" => "index"]);
-$router->add("/invoices", ["controller" => "invoices", "action" => "index"]);
-$router->add("/", ["controller" => "home", "action" => "index"]);
-$router->add("/{controller}/{action}", $params = []);
+$dotenv->load(".env");
+
+set_error_handler("Framework\ErrorHandler::handleError");
+
+set_exception_handler("Framework\ErrorHandler::handleException");
+
+$path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+
+if($path === false)
+{
+    throw new UnexpectedValueException("Malformed URL:
+                                        '{$_SERVER["REQUEST_URI"]}'");
+}
 
 
+$router = require "config/routes.php";
 
-$dispatcher = new Framework\Dispatcher($router);
+$container = require "config/services.php";
+
+$dispatcher = new Framework\Dispatcher($router, $container);
 
 $dispatcher->handle($path);
 

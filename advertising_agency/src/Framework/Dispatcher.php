@@ -3,10 +3,11 @@
 namespace Framework;
 
 use ReflectionMethod;
-use ReflectionClass;
+use Framework\Exceptions\PageNotFoundException;
 class Dispatcher
 {
-    public function __construct(private Router $router)
+    public function __construct(private Router $router,
+                                private Container $container)
     {
     }
     
@@ -17,13 +18,13 @@ class Dispatcher
 
         if($params === false)
         {
-            exit("No route matched");
+            throw new PageNotFoundException("No route matched");
         }
 
         $action = $this->getActionName($params);
         $controller = $this->getControllerName($params);
         
-        $controller_object = $this->getObject($controller);
+        $controller_object = $this->container->get($controller);
 
         $args = $this->getActionArguments($controller, $action, $params);
 
@@ -70,27 +71,5 @@ class Dispatcher
         return $action;
     }
 
-    private function getObject(string $class_name) : object
-    {
-        $reflector = new ReflectionClass($class_name);
-
-        $constructor = $reflector->getConstructor();
-
-        $depenencies = [] ;
-
-        if($constructor === null)   
-        {
-            return new $class_name;
-        }
-        
-        foreach($constructor->getParameters() as $parameter)
-        {
-            $type = (string) $parameter->getType();
-
-            $depenencies[] = $this->getObject($type);
-        }
-        
-
-        return new $class_name(...$depenencies);
-    }
+    
 }
