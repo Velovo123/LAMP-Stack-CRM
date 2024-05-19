@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use PDO;
+use App\Database;
 class Invoice
 {
+
+    public function __construct(private Database $database)
+    {
+
+    }
     public function getData() : array
     {
-        $dsn = "mysql:host=db;dbname=lamp_docker;charset=utf8;port=3306";
-
-        $pdo = new PDO($dsn,"lamp_docker","password", [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]);
-
+        $pdo = $this->database->getConnection();
+        
         $stmt = $pdo->query("SELECT * FROM invoice");
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
