@@ -1,4 +1,4 @@
-Show invoice with ID <?= $id ?> here
-
+<h1><?= $invoice["TotalAmount"]?></h1>
+<p><?= $invoice["TotalAmount"]?></p>
 </body>
 </html>

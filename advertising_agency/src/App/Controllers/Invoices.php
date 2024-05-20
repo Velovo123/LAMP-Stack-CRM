@@ -1,8 +1,10 @@
 <?php
 
+
 namespace App\Controllers;
 
 use App\Models\Invoice;
+use Framework\Exceptions\PageNotFoundException;
 use Framework\Viewer;
 class Invoices
 {
@@ -13,7 +15,7 @@ class Invoices
     public function index()
     {
 
-        $invoices = $this->model->getData();
+        $invoices = $this->model->findAll();
 
 
         echo $this->viewer->render("shared/header.php", ["title" => "Invoices"]);
@@ -24,9 +26,15 @@ class Invoices
 
     public function show(string $id)
     {
+        $invoice = $this->model->find($id);
+
+        if($invoice === false)
+        {
+            throw new PageNotFoundException("Product not found");
+        }
         echo $this->viewer->render("shared/header.php",["title" => "Invoices"]);
 
-        echo $this->viewer->render("Invoices/show.php", ["id" => $id]);
+        echo $this->viewer->render("Invoices/show.php", ["invoice" => $invoice]);
     }
 
     public function showPage(string $title, $id, string $page)
