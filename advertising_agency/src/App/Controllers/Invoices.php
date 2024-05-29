@@ -41,4 +41,17 @@ class Invoices
     {
         echo $title, " ", $id, " ", $page;
     }
+
+    public function new()
+    {
+        echo $this->viewer->render("shared/header.php",["title" => "New Product"]);
+
+        echo $this->viewer->render("Invoices/new.php");
+    }
+
+    public function create()
+    {
+       // header("Location: /products/{$this->model->getInsertID()}/show")
+       // exit
+    }
 }

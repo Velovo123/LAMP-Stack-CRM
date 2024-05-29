@@ -4,18 +4,29 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Models\Advertisement;
+use App\Models\Invoice;
 use Framework\Viewer;
 
 class Home
 {
+
+    public function __construct(private Viewer $viewer,
+                                private Invoice $invoice, 
+                                private Advertisement $advertisement)
+    {
+    }
+
     public function index()
     {
-        $viewer = new Viewer;
+        $paymentStatusData = $this->invoice->getPaymentStatusData();
+        $quarterlyInvoiceData = $this->invoice->getQuarterlyInvoiceData();
+        $adDurationData = $this->advertisement->getAdDurationData();
 
-        echo $viewer->render("shared/header.php", [
-            "title" => "Home"
-        ]);
+        echo $this->viewer->render("shared/header.php", ["title" => "Dashboard"]);
 
-        echo $viewer->render("Home/index.php");
+        echo $this->viewer->render("home/index.php", ["paymentStatusData" => $paymentStatusData,
+                                                     "quarterlyInvoiceData" => $quarterlyInvoiceData,
+                                                     "adDurationData" => $adDurationData]);
     }
 }
